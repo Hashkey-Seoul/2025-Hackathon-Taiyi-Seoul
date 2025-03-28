@@ -12,9 +12,14 @@ export class QuizService {
     const quizModel = this.modelManager.getModel(ModelType.QUIZ);
     const quiz = new Quiz();
     try {
-      quiz.question =
-        "Do you predict that the price of HSK coin will exceed $10 in 2026?";
-      quiz.answerList = ["Yes", "No"];
+      quiz.question = "Which consensus mechanism does HashKey Chain use?";
+      quiz.answerList = [
+        "Proof of Work",
+        "Delegated Proof of Stake",
+        "Proof of Authority",
+        "Nominated Proof of Stake",
+      ];
+      quiz.correctAnswer = "Proof of Authority";
 
       await quizModel.create(quiz);
     } catch (error) {}
@@ -30,6 +35,7 @@ export class QuizService {
         quizDto.id = quiz._id;
         quizDto.question = quiz.question;
         quizDto.answerList = quiz.answerList;
+        quizDto.correctAnswer = quiz.correctAnswer;
         response.data.push(quizDto);
       }
     } catch (error) {}

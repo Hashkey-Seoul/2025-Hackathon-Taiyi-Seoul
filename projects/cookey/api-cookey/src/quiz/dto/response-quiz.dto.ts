@@ -5,6 +5,7 @@ export class QuizDto {
   id: string;
   question: string;
   answerList: string[];
+  correctAnswer: string;
 }
 export class ResponseQuizListDto extends CoreResponseDto {
   constructor() {

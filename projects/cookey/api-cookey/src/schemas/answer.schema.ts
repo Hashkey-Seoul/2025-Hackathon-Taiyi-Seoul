@@ -47,6 +47,14 @@ export class Answer {
     type: String,
   })
   answer;
+
+  @ApiProperty({
+    example: "yes",
+    description: "user's answer to quiz",
+    required: true,
+    type: Number,
+  })
+  ratio;
 }
 
 export const AnswerSchema = SchemaFactory.createForClass(Answer);

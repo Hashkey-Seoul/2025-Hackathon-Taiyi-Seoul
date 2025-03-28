@@ -39,6 +39,15 @@ export class Quiz {
   })
   @Prop({ type: [String] })
   answerList: string[];
+
+  @ApiProperty({
+    example: "yes",
+    description: "correct",
+    required: true,
+    type: String,
+  })
+  @Prop({ type: String })
+  correctAnswer: string;
 }
 
 export const QuizSchema = SchemaFactory.createForClass(Quiz);
