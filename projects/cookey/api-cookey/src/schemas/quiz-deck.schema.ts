@@ -4,11 +4,12 @@ import mongoosePaginate from "mongoose-paginate-v2";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 import { ApiProperty } from "@nestjs/swagger";
+import { Quiz } from "./quiz.schema";
 
-export type QuizDocument = Quiz & Document;
+export type QuizDeckDocument = QuizDeck & Document;
 
 @Schema({ timestamps: { createdAt: "createdAt", updatedAt: "updatedAt" } })
-export class Quiz {
+export class QuizDeck {
   constructor() {
     this._id = new Types.ObjectId();
   }
@@ -23,22 +24,22 @@ export class Quiz {
   _id;
 
   @ApiProperty({
-    example: "Do you handsome???",
-    description: "question string",
+    example: "Daily quiz deck 3/28",
+    description: "quiz deck title",
     required: true,
     type: String,
   })
   @Prop({ type: String })
-  question: string;
+  title: string;
 
   @ApiProperty({
-    example: "['yes','no']",
-    description: "string type answer list",
+    example: "['62e8eef54b0598a62819330f','62e8eef54b0598a62819440f']",
+    description: "quiz db list",
     required: true,
-    type: String,
+    type: [String],
   })
-  @Prop({ type: [String] })
-  answerList: string[];
+  @Prop({ type: [Quiz] })
+  quizList: [];
 }
 
 export const QuizSchema = SchemaFactory.createForClass(Quiz);

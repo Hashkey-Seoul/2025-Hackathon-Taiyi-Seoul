@@ -1,4 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
+import { ModelType } from "src/enums/type.enum";
+import { ModelmanagerService } from "src/modelmanager/modelmanager.service";
+import { QuizDto, ResponseQuizListDto } from "./dto/response-quiz.dto";
+import { Quiz } from "src/schemas/quiz.schema";
 
 @Injectable()
-export class QuizService {}
+export class QuizService {
+  constructor(private readonly modelManager: ModelmanagerService) {}
+
+  async postQuiz() {
+    const quizModel = this.modelManager.getModel(ModelType.QUIZ);
+    const quiz = new Quiz();
+    try {
+      quiz.question =
+        "Do you predict that the price of HSK coin will exceed $10 in 2026?";
+      quiz.answerList = ["Yes", "No"];
+
+      await quizModel.create(quiz);
+    } catch (error) {}
+    return "done";
+  }
+  async getQuiz() {
+    const quizModel = this.modelManager.getModel(ModelType.QUIZ);
+    const response = new ResponseQuizListDto();
+    try {
+      const quizAll = await quizModel.find();
+      for (const quiz of quizAll) {
+        const quizDto = new QuizDto();
+        quizDto.id = quiz._id;
+        quizDto.question = quiz.question;
+        quizDto.answerList = quiz.answerList;
+        response.data.push(quizDto);
+      }
+    } catch (error) {}
+    return response;
+  }
+}

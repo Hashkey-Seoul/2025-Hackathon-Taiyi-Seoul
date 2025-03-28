@@ -28,7 +28,11 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup("api", app, document);
   }
-  // app.enableCors();
+  app.enableCors({
+    origin: "*", // 모든 도메인 허용 (보안상 특정 도메인만 허용 가능)
+    methods: "GET, POST, PUT, DELETE, OPTIONS",
+    allowedHeaders: "Content-Type, Authorization",
+  });
 
   await app.listen(3001);
 }

@@ -6,4 +6,5 @@ export enum ResourceType {
 export enum ModelType {
   USER = "USER",
   QUIZ = "QUIZ",
+  ANSWER = "ANSWER",
 }

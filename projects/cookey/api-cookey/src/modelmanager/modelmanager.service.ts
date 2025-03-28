@@ -10,18 +10,28 @@ import { InjectConnection, InjectModel } from "@nestjs/mongoose";
 import { AggregatePaginateModel } from "mongoose";
 import { ModelType } from "src/enums/type.enum";
 import { User, UserDocument } from "src/schemas/user.schema";
+import { Quiz, QuizDocument } from "src/schemas/quiz.schema";
+import { Answer, AnswerDocument } from "src/schemas/answer.schema";
 
 @Injectable()
 export class ModelmanagerService {
   constructor(
     @InjectModel(User.name)
     private userModel: AggregatePaginateModel<UserDocument>,
+    @InjectModel(Quiz.name)
+    private quizModel: AggregatePaginateModel<QuizDocument>,
+    @InjectModel(Answer.name)
+    private answerModel: AggregatePaginateModel<AnswerDocument>,
   ) {}
 
   getAggregateModel(type): AggregatePaginateModel<any> {
     switch (type) {
       case ModelType.USER:
         return this.userModel;
+      case ModelType.QUIZ:
+        return this.quizModel;
+      case ModelType.ANSWER:
+        return this.answerModel;
       default:
         return null;
     }
@@ -31,6 +41,10 @@ export class ModelmanagerService {
     switch (type) {
       case ModelType.USER:
         return this.userModel;
+      case ModelType.QUIZ:
+        return this.quizModel;
+      case ModelType.ANSWER:
+        return this.answerModel;
       default:
         return null;
     }

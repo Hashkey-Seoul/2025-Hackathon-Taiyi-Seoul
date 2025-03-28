@@ -5,10 +5,10 @@ import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 import { ApiProperty } from "@nestjs/swagger";
 
-export type QuizDocument = Quiz & Document;
+export type AnswerDocument = Answer & Document;
 
 @Schema({ timestamps: { createdAt: "createdAt", updatedAt: "updatedAt" } })
-export class Quiz {
+export class Answer {
   constructor() {
     this._id = new Types.ObjectId();
   }
@@ -23,26 +23,34 @@ export class Quiz {
   _id;
 
   @ApiProperty({
-    example: "Do you handsome???",
-    description: "question string",
+    example: "0x2C20335750bD536e81f19E588Bb94e6eC93e34CC",
+    description: "user's wallet address",
     required: true,
     type: String,
   })
-  @Prop({ type: String })
-  question: string;
+  @Prop({ type: String, collation: { locale: "en", strength: 2 } })
+  wallet: string;
 
   @ApiProperty({
-    example: "['yes','no']",
-    description: "string type answer list",
+    example: "62e8eef54b0598a62819330f",
+    description: "MongoDB Object ID",
+    required: true,
+    type: MongooseSchema.Types.ObjectId,
+  })
+  @Prop({ type: MongooseSchema.Types.ObjectId })
+  quiz;
+
+  @ApiProperty({
+    example: "yes",
+    description: "user's answer to quiz",
     required: true,
     type: String,
   })
-  @Prop({ type: [String] })
-  answerList: string[];
+  answer;
 }
 
-export const QuizSchema = SchemaFactory.createForClass(Quiz);
+export const AnswerSchema = SchemaFactory.createForClass(Answer);
 
-QuizSchema.plugin(mongoosePaginate);
-QuizSchema.plugin(mongooseAggregatePaginate);
-export const pagedQuizSchema = QuizSchema;
+AnswerSchema.plugin(mongoosePaginate);
+AnswerSchema.plugin(mongooseAggregatePaginate);
+export const pagedAnswerSchema = AnswerSchema;
