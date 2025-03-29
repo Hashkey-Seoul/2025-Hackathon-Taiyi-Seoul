@@ -121,6 +121,8 @@ export class QuizService {
         quizDto.points = user.point;
         response.data.push(quizDto);
       }
+      response.credits = user.credit;
+      response.points = user.point;
     } catch (error) {}
     return response;
   }

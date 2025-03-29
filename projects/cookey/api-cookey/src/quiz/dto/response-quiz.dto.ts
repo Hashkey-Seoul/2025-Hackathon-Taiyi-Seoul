@@ -30,6 +30,8 @@ export class ResponseQuizListDto extends CoreResponseDto {
     this.data = [];
   }
   data: QuizDto[];
+  credits: number;
+  points: number;
 }
 
 export class ResponseQuizDeckListDto extends CoreResponseDto {
@@ -38,4 +40,6 @@ export class ResponseQuizDeckListDto extends CoreResponseDto {
     this.data = [];
   }
   data: QuizDeckDto[];
+  credits: number;
+  points: number;
 }
