@@ -19,6 +19,11 @@ import { JwtPayloadDto } from "src/auth/dto/jwt-payload.dto";
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get("/:wallet")
+  getUserInfo(@Param("wallet") wallet) {
+    return this.userService.getUserInfo(wallet);
+  }
+
   // @ApiBearerAuth()
   // @UseGuards(JwtAuthGuard)
   // @Get("/me")

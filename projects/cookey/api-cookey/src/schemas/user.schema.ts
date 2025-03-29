@@ -40,6 +40,13 @@ export class User {
     collation: { locale: "en", strength: 2 },
   })
   wallet;
+
+  @ApiProperty({
+    description: "cookey point",
+    type: Number,
+  })
+  @Prop({ type: Number })
+  point;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
