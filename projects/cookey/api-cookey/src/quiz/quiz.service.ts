@@ -49,7 +49,9 @@ export class QuizService {
     }
   }
   async postSubmission(body: QuizSubmissionDto) {
+    const quizModel = this.modelManager.getModel(ModelType.QUIZ);
     const answerModel = this.modelManager.getModel(ModelType.ANSWER);
+    const response = new ResponseQuizListDto();
 
     const answer = new Answer();
     try {
@@ -66,6 +68,30 @@ export class QuizService {
     } catch (error) {
       console.log(error);
     }
+
+    try {
+      const myAnswers = await answerModel.find({
+        wallet: { $regex: new RegExp(`^${body.walletAddress}$`, "i") },
+      });
+      const quizAll = await quizModel.find();
+      const answerIDS = myAnswers.map((item) => item.quiz.toString());
+      for (const quiz of quizAll) {
+        const quizDto = new QuizDto();
+        quizDto.id = quiz._id;
+        quizDto.question = quiz.question;
+        quizDto.answerList = quiz.answerList;
+        quizDto.correctAnswer = quiz.correctAnswer;
+        if (answerIDS.includes(quiz._id.toString())) {
+          // console.log("true");
+          quizDto.isDone = true;
+        } else {
+          // console.log("false");
+          quizDto.isDone = false;
+        }
+        response.data.push(quizDto);
+      }
+    } catch (error) {}
+    return response;
   }
   async getQuizDeck() {
     const quizdeckModel = this.modelManager.getModel(ModelType.QUIZDECK);
@@ -91,6 +117,48 @@ export class QuizService {
     }
     return response;
   }
+  async getQuizDeckWallet(wallet) {
+    const quizdeckModel = this.modelManager.getModel(ModelType.QUIZDECK);
+    const answers = this.modelManager.getModel(ModelType.ANSWER);
+
+    const response = new ResponseQuizDeckListDto();
+    try {
+      const deckAll = await quizdeckModel.find();
+      const myAnswers = await answers.find({
+        wallet: { $regex: new RegExp(`^${wallet}$`, "i") },
+      });
+
+      const answerIDS = myAnswers.map((item) => item.quiz.toString());
+
+      console.log(answerIDS);
+      for (const deck of deckAll) {
+        const quizdeckDto = new QuizDeckDto();
+        quizdeckDto.id = deck._id;
+        quizdeckDto.title = deck.title;
+        for (const quiz of deck.quizList) {
+          const quizDto = new QuizDto();
+          quizDto.id = quiz._id;
+          quizDto.question = quiz.question;
+          quizDto.answerList = quiz.answerList;
+          quizDto.correctAnswer = quiz.correctAnswer;
+
+          if (answerIDS.includes(quiz._id.toString())) {
+            // console.log("true");
+            quizDto.isDone = true;
+          } else {
+            // console.log("false");
+            quizDto.isDone = false;
+          }
+
+          quizdeckDto.quizList.push(quizDto);
+        }
+        response.data.push(quizdeckDto);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    return response;
+  }
   async getQuiz() {
     const quizModel = this.modelManager.getModel(ModelType.QUIZ);
     const response = new ResponseQuizListDto();
@@ -102,6 +170,37 @@ export class QuizService {
         quizDto.question = quiz.question;
         quizDto.answerList = quiz.answerList;
         quizDto.correctAnswer = quiz.correctAnswer;
+        response.data.push(quizDto);
+      }
+    } catch (error) {}
+    return response;
+  }
+
+  async getQuizWallet(wallet) {
+    const quizModel = this.modelManager.getModel(ModelType.QUIZ);
+    const answers = this.modelManager.getModel(ModelType.ANSWER);
+
+    const response = new ResponseQuizListDto();
+    try {
+      const quizAll = await quizModel.find();
+      const myAnswers = await answers.find({
+        wallet: { $regex: new RegExp(`^${wallet}$`, "i") },
+      });
+
+      const answerIDS = myAnswers.map((item) => item.quiz.toString());
+      for (const quiz of quizAll) {
+        const quizDto = new QuizDto();
+        quizDto.id = quiz._id;
+        quizDto.question = quiz.question;
+        quizDto.answerList = quiz.answerList;
+        quizDto.correctAnswer = quiz.correctAnswer;
+        if (answerIDS.includes(quiz._id.toString())) {
+          // console.log("true");
+          quizDto.isDone = true;
+        } else {
+          // console.log("false");
+          quizDto.isDone = false;
+        }
         response.data.push(quizDto);
       }
     } catch (error) {}

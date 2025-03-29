@@ -6,6 +6,7 @@ export class QuizDto {
   question: string;
   answerList: string[];
   correctAnswer: string;
+  isDone: boolean;
 }
 
 export class QuizDeckDto {

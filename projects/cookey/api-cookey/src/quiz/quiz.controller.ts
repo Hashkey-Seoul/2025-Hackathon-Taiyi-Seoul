@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
 import { QuizService } from "./quiz.service";
 import { ApiTags } from "@nestjs/swagger";
 import { QuizSubmissionDto } from "./dto/request-quiz.dto";
@@ -24,8 +24,16 @@ export class QuizController {
   getQuizDeck(@Query() quries) {
     return this.quizService.getQuizDeck();
   }
+  @Get("/deck/:wallet")
+  getQuizDeckWallet(@Param("wallet") wallet) {
+    return this.quizService.getQuizDeckWallet(wallet);
+  }
   @Get("/")
   getQuiz(@Query() quries) {
     return this.quizService.getQuiz();
+  }
+  @Get("/:wallet")
+  getQuizWallet(@Param("wallet") wallet) {
+    return this.quizService.getQuizWallet(wallet);
   }
 }
