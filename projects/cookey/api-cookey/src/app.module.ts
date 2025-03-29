@@ -34,7 +34,7 @@ import jwtConfig from "./configs/jwt.config";
     }),
     UserModule,
     QuizModule,
-    SubscribeModule,
+    // SubscribeModule,
   ],
   controllers: [AppController],
   providers: [AppService, Logger],

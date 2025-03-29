@@ -82,7 +82,7 @@ const abi = [
 ]; // 예시로 ERC-20 토큰의 Transfer 이벤트 ABI 사용
 
 // EventPoller 인스턴스 생성 후 폴링 시작
-// const eventPoller = new EventPoller(abi);
+const eventPoller = new EventPoller(abi);
 // eventPoller.startPolling();
 
 @Injectable()
@@ -96,7 +96,7 @@ export class SubscribeService implements OnModuleInit, OnModuleDestroy {
   constructor() {
     this.web3 = new Web3(new Web3.providers.WebsocketProvider(this.wsRpcUrl));
     // console.log(this.wsRpcUrl);
-    // console.log(this.targetAddress);
+    console.log(this.targetAddress);
   }
 
   // WebSocket 연결 및 블록 이벤트 구독

@@ -13,11 +13,17 @@ import { UserService } from "./user.service";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "src/auth/guard/jwt.guard";
 import { JwtPayloadDto } from "src/auth/dto/jwt-payload.dto";
+import { RequestSignUpDto } from "./dto/request-user.dto";
 
 @ApiTags("User")
 @Controller("user")
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Post("/")
+  signUpUser(@Body() body: RequestSignUpDto) {
+    return this.userService.signUpUser(body);
+  }
 
   @Get("/:wallet")
   getUserInfo(@Param("wallet") wallet) {

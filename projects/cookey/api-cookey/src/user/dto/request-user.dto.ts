@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsUrl } from "class-validator";
+import { IsEthereumAddress, IsString, IsUrl } from "class-validator";
 import { CoreResponseDto } from "src/common/dto/core.dto";
 
 export class RequestUploadDto {
@@ -9,4 +9,13 @@ export class RequestUploadDto {
   })
   @IsUrl()
   url: string;
+}
+
+export class RequestSignUpDto {
+  @ApiProperty({
+    description: "user wallet",
+    type: String,
+  })
+  @IsEthereumAddress()
+  wallet: string;
 }

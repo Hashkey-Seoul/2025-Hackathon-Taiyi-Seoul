@@ -61,6 +61,8 @@ export class QuizService {
       answer.timeout = body.timeout;
       answer.selectedPercentage = body.selectedPercentage;
       answer.wallet = body.walletAddress;
+
+      await answerModel.create(answer);
     } catch (error) {
       console.log(error);
     }
