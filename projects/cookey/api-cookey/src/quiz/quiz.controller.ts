@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Post, Query } from "@nestjs/common";
 import { QuizService } from "./quiz.service";
 import { ApiTags } from "@nestjs/swagger";
+import { QuizSubmissionDto } from "./dto/request-quiz.dto";
 
 @ApiTags("Quiz")
 @Controller("quiz")
@@ -15,6 +16,10 @@ export class QuizController {
   // postQuizDeck(@Query() quries) {
   //   return this.quizService.postQuizDeck();
   // }
+  @Post("/submission")
+  postQuizDeck(@Body() body: QuizSubmissionDto) {
+    return this.quizService.postSubmission(body);
+  }
   @Get("/deck")
   getQuizDeck(@Query() quries) {
     return this.quizService.getQuizDeck();

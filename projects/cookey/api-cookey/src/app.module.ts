@@ -10,7 +10,8 @@ import { AwsS3Module } from "./aws-s3/aws-s3.module";
 import { AuthModule } from "./auth/auth.module";
 import { JwtModule } from "@nestjs/jwt";
 import { UserModule } from "./user/user.module";
-import { QuizModule } from './quiz/quiz.module';
+import { QuizModule } from "./quiz/quiz.module";
+// import { SubscribeModule } from './subscribe/subscribe.module';
 import jwtConfig from "./configs/jwt.config";
 
 @Module({
@@ -33,6 +34,7 @@ import jwtConfig from "./configs/jwt.config";
     }),
     UserModule,
     QuizModule,
+    // SubscribeModule,
   ],
   controllers: [AppController],
   providers: [AppService, Logger],

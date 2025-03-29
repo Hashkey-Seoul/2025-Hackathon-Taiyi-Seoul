@@ -33,7 +33,16 @@ export class Answer {
 
   @ApiProperty({
     example: "62e8eef54b0598a62819330f",
-    description: "MongoDB Object ID",
+    description: "QUIZ DECK MongoDB Object ID",
+    required: true,
+    type: MongooseSchema.Types.ObjectId,
+  })
+  @Prop({ type: MongooseSchema.Types.ObjectId })
+  quizdeck;
+
+  @ApiProperty({
+    example: "62e8eef54b0598a62819330f",
+    description: "QUIZ MongoDB Object ID",
     required: true,
     type: MongooseSchema.Types.ObjectId,
   })
@@ -42,19 +51,48 @@ export class Answer {
 
   @ApiProperty({
     example: "yes",
-    description: "user's answer to quiz",
+    description: "user's percentage pridiction to answer",
     required: true,
-    type: String,
+    type: Number,
   })
-  answer;
+  @Prop({ type: Number })
+  selectedPercentage;
 
   @ApiProperty({
     example: "yes",
     description: "user's answer to quiz",
     required: true,
-    type: Number,
+    type: String,
   })
-  ratio;
+  @Prop({ type: String })
+  selectedAnswer;
+
+  @ApiProperty({
+    example: "yes",
+    description: "user's answer to quiz",
+    required: true,
+    type: String,
+  })
+  @Prop({ type: String })
+  quizTitle;
+
+  @ApiProperty({
+    example: "yes",
+    description: "user's answer to quiz",
+    required: true,
+    type: String,
+  })
+  @Prop({ type: String })
+  deckTitle;
+
+  @ApiProperty({
+    example: "true",
+    description: "check time out",
+    required: true,
+    type: Boolean,
+  })
+  @Prop({ type: Boolean })
+  timeout;
 }
 
 export const AnswerSchema = SchemaFactory.createForClass(Answer);

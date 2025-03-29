@@ -10,6 +10,8 @@ import {
 import { Quiz } from "src/schemas/quiz.schema";
 import { QuizDeck } from "src/schemas/quiz-deck.schema";
 import { Types } from "mongoose";
+import { QuizSubmissionDto } from "./dto/request-quiz.dto";
+import { Answer } from "src/schemas/answer.schema";
 
 @Injectable()
 export class QuizService {
@@ -42,6 +44,23 @@ export class QuizService {
       deck.quizList = await quizModel.find();
       console.log(deck);
       await quizDeckModel.create(deck);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async postSubmission(body: QuizSubmissionDto) {
+    const answerModel = this.modelManager.getModel(ModelType.ANSWER);
+
+    const answer = new Answer();
+    try {
+      answer.deckTitle = body.deckTitle;
+      answer.quiz = new Types.ObjectId(body.quizId);
+      answer.quizTitle = body.quizTitle;
+      answer.quizdeck = new Types.ObjectId(body.deckId);
+      answer.selectedAnswer = body.selectedAnswer;
+      answer.timeout = body.timeout;
+      answer.selectedPercentage = body.selectedPercentage;
+      answer.wallet = body.walletAddress;
     } catch (error) {
       console.log(error);
     }
