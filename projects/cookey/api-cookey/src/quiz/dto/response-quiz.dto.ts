@@ -7,10 +7,28 @@ export class QuizDto {
   answerList: string[];
   correctAnswer: string;
 }
+
+export class QuizDeckDto {
+  constructor() {
+    this.quizList = [];
+  }
+  id: string;
+  title: string;
+  quizList: QuizDto[];
+}
+
 export class ResponseQuizListDto extends CoreResponseDto {
   constructor() {
     super();
     this.data = [];
   }
   data: QuizDto[];
+}
+
+export class ResponseQuizDeckListDto extends CoreResponseDto {
+  constructor() {
+    super();
+    this.data = [];
+  }
+  data: QuizDeckDto[];
 }

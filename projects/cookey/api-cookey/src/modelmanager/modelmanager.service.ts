@@ -12,6 +12,7 @@ import { ModelType } from "src/enums/type.enum";
 import { User, UserDocument } from "src/schemas/user.schema";
 import { Quiz, QuizDocument } from "src/schemas/quiz.schema";
 import { Answer, AnswerDocument } from "src/schemas/answer.schema";
+import { QuizDeck, QuizDeckDocument } from "src/schemas/quiz-deck.schema";
 
 @Injectable()
 export class ModelmanagerService {
@@ -20,6 +21,8 @@ export class ModelmanagerService {
     private userModel: AggregatePaginateModel<UserDocument>,
     @InjectModel(Quiz.name)
     private quizModel: AggregatePaginateModel<QuizDocument>,
+    @InjectModel(QuizDeck.name)
+    private quizDeckModel: AggregatePaginateModel<QuizDeckDocument>,
     @InjectModel(Answer.name)
     private answerModel: AggregatePaginateModel<AnswerDocument>,
   ) {}
@@ -30,6 +33,8 @@ export class ModelmanagerService {
         return this.userModel;
       case ModelType.QUIZ:
         return this.quizModel;
+      case ModelType.QUIZDECK:
+        return this.quizDeckModel;
       case ModelType.ANSWER:
         return this.answerModel;
       default:
@@ -43,6 +48,8 @@ export class ModelmanagerService {
         return this.userModel;
       case ModelType.QUIZ:
         return this.quizModel;
+      case ModelType.QUIZDECK:
+        return this.quizDeckModel;
       case ModelType.ANSWER:
         return this.answerModel;
       default:

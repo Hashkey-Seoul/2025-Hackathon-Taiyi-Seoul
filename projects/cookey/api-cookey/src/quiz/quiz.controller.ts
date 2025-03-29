@@ -7,9 +7,17 @@ import { ApiTags } from "@nestjs/swagger";
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}
 
-  @Post("/")
-  postQuiz(@Query() quries) {
-    return this.quizService.postQuiz();
+  // @Post("/")
+  // postQuiz(@Query() quries) {
+  //   return this.quizService.postQuiz();
+  // }
+  // @Post("/deck")
+  // postQuizDeck(@Query() quries) {
+  //   return this.quizService.postQuizDeck();
+  // }
+  @Get("/deck")
+  getQuizDeck(@Query() quries) {
+    return this.quizService.getQuizDeck();
   }
   @Get("/")
   getQuiz(@Query() quries) {

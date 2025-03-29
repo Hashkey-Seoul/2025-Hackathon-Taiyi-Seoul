@@ -36,14 +36,14 @@ export class QuizDeck {
     example: "['62e8eef54b0598a62819330f','62e8eef54b0598a62819440f']",
     description: "quiz db list",
     required: true,
-    type: [String],
+    type: [Quiz],
   })
-  @Prop({ type: [Quiz] })
-  quizList: [];
+  @Prop({ type: () => [Quiz], ref: "Quiz" })
+  quizList: Quiz[];
 }
 
-export const QuizSchema = SchemaFactory.createForClass(Quiz);
+export const QuizDeckSchema = SchemaFactory.createForClass(QuizDeck);
 
-QuizSchema.plugin(mongoosePaginate);
-QuizSchema.plugin(mongooseAggregatePaginate);
-export const pagedQuizSchema = QuizSchema;
+QuizDeckSchema.plugin(mongoosePaginate);
+QuizDeckSchema.plugin(mongooseAggregatePaginate);
+export const pagedQuizSchema = QuizDeckSchema;
