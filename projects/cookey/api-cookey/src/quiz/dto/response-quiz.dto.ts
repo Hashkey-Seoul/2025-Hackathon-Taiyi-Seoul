@@ -7,6 +7,8 @@ export class QuizDto {
   answerList: string[];
   correctAnswer: string;
   isDone: boolean;
+  credits: number;
+  points: number;
 }
 
 export class QuizDeckDto {
@@ -18,6 +20,8 @@ export class QuizDeckDto {
   isUnlock: boolean;
   cost: number;
   quizList: QuizDto[];
+  credits: number;
+  points: number;
 }
 
 export class ResponseQuizListDto extends CoreResponseDto {

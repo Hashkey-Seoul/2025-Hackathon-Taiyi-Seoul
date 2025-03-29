@@ -99,6 +99,9 @@ export class QuizService {
       const myAnswers = await answerModel.find({
         wallet: { $regex: new RegExp(`^${body.walletAddress}$`, "i") },
       });
+      const user = await userModel.findOne({
+        wallet: { $regex: new RegExp(`^${body.walletAddress}$`, "i") },
+      });
       const quizAll = await quizModel.find();
       const answerIDS = myAnswers.map((item) => item.quiz.toString());
       for (const quiz of quizAll) {
@@ -114,6 +117,8 @@ export class QuizService {
           // console.log("false");
           quizDto.isDone = false;
         }
+        quizDto.credits = user.credit;
+        quizDto.points = user.point;
         response.data.push(quizDto);
       }
     } catch (error) {}
@@ -147,11 +152,15 @@ export class QuizService {
     const quizdeckModel = this.modelManager.getModel(ModelType.QUIZDECK);
     const answers = this.modelManager.getModel(ModelType.ANSWER);
     const unlockModel = this.modelManager.getModel(ModelType.UNLOCKDECK);
+    const userModel = this.modelManager.getModel(ModelType.USER);
 
     const response = new ResponseQuizDeckListDto();
     try {
       const deckAll = await quizdeckModel.find();
       const myAnswers = await answers.find({
+        wallet: { $regex: new RegExp(`^${wallet}$`, "i") },
+      });
+      const user = await userModel.findOne({
         wallet: { $regex: new RegExp(`^${wallet}$`, "i") },
       });
 
@@ -161,6 +170,8 @@ export class QuizService {
         const quizdeckDto = new QuizDeckDto();
         quizdeckDto.id = deck._id;
         quizdeckDto.title = deck.title;
+        quizdeckDto.credits = user.credit;
+        quizdeckDto.points = user.point;
 
         const unlocked = await unlockModel.findOne({
           wallet: { $regex: new RegExp(`^${wallet}$`, "i") },
