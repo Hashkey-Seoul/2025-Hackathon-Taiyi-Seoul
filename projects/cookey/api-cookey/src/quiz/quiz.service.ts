@@ -10,8 +10,10 @@ import {
 import { Quiz } from "src/schemas/quiz.schema";
 import { QuizDeck } from "src/schemas/quiz-deck.schema";
 import { Types } from "mongoose";
-import { QuizSubmissionDto } from "./dto/request-quiz.dto";
+import { QuizSubmissionDto, UnlockDeckDto } from "./dto/request-quiz.dto";
 import { Answer } from "src/schemas/answer.schema";
+import { CoreResponseDto } from "src/common/dto/core.dto";
+import { UnlockDeck } from "src/schemas/unlock-deck.schema";
 
 @Injectable()
 export class QuizService {
@@ -51,20 +53,44 @@ export class QuizService {
   async postSubmission(body: QuizSubmissionDto) {
     const quizModel = this.modelManager.getModel(ModelType.QUIZ);
     const answerModel = this.modelManager.getModel(ModelType.ANSWER);
+    const userModel = this.modelManager.getModel(ModelType.USER);
     const response = new ResponseQuizListDto();
 
-    const answer = new Answer();
     try {
-      answer.deckTitle = body.deckTitle;
-      answer.quiz = new Types.ObjectId(body.quizId);
-      answer.quizTitle = body.quizTitle;
-      answer.quizdeck = new Types.ObjectId(body.deckId);
-      answer.selectedAnswer = body.selectedAnswer;
-      answer.timeout = body.timeout;
-      answer.selectedPercentage = body.selectedPercentage;
-      answer.wallet = body.walletAddress;
+      const already = await answerModel.findOne({
+        wallet: { $regex: new RegExp(`^${body.walletAddress}$`, "i") },
+        quiz: body.quizId,
+        quizdeck: body.deckId,
+      });
+      if (already == null) {
+        const answer = new Answer();
+        answer.deckTitle = body.deckTitle;
+        answer.quiz = new Types.ObjectId(body.quizId);
+        answer.quizTitle = body.quizTitle;
+        answer.quizdeck = new Types.ObjectId(body.deckId);
+        answer.selectedAnswer = body.selectedAnswer;
+        answer.timeout = body.timeout;
+        answer.selectedPercentage = body.selectedPercentage;
+        answer.wallet = body.walletAddress;
 
-      await answerModel.create(answer);
+        await answerModel.create(answer);
+
+        const quiz = await quizModel.findById(body.quizId);
+        if (
+          !quiz.selectedAnswer ||
+          quiz.selectedAnswer === body.selectedAnswer
+        ) {
+          await userModel.findOneAndUpdate(
+            { wallet: { $regex: new RegExp(`^${body.walletAddress}$`, "i") } },
+            { $inc: { credit: 1, point: 1 } },
+          );
+        } else {
+          await userModel.findOneAndUpdate(
+            { wallet: { $regex: new RegExp(`^${body.walletAddress}$`, "i") } },
+            { $inc: { point: 1 } },
+          );
+        }
+      }
     } catch (error) {
       console.log(error);
     }
@@ -120,6 +146,7 @@ export class QuizService {
   async getQuizDeckWallet(wallet) {
     const quizdeckModel = this.modelManager.getModel(ModelType.QUIZDECK);
     const answers = this.modelManager.getModel(ModelType.ANSWER);
+    const unlockModel = this.modelManager.getModel(ModelType.UNLOCKDECK);
 
     const response = new ResponseQuizDeckListDto();
     try {
@@ -130,29 +157,80 @@ export class QuizService {
 
       const answerIDS = myAnswers.map((item) => item.quiz.toString());
 
-      console.log(answerIDS);
       for (const deck of deckAll) {
         const quizdeckDto = new QuizDeckDto();
         quizdeckDto.id = deck._id;
         quizdeckDto.title = deck.title;
-        for (const quiz of deck.quizList) {
-          const quizDto = new QuizDto();
-          quizDto.id = quiz._id;
-          quizDto.question = quiz.question;
-          quizDto.answerList = quiz.answerList;
-          quizDto.correctAnswer = quiz.correctAnswer;
 
-          if (answerIDS.includes(quiz._id.toString())) {
-            // console.log("true");
-            quizDto.isDone = true;
-          } else {
-            // console.log("false");
-            quizDto.isDone = false;
+        const unlocked = await unlockModel.findOne({
+          wallet: { $regex: new RegExp(`^${wallet}$`, "i") },
+          deck: deck._id,
+        });
+        if (unlocked) {
+          quizdeckDto.isUnlock = true;
+          for (const quiz of deck.quizList) {
+            const quizDto = new QuizDto();
+            quizDto.id = quiz._id;
+            quizDto.question = quiz.question;
+            quizDto.answerList = quiz.answerList;
+            quizDto.correctAnswer = quiz.correctAnswer;
+
+            if (answerIDS.includes(quiz._id.toString())) {
+              // console.log("true");
+              quizDto.isDone = true;
+            } else {
+              // console.log("false");
+              quizDto.isDone = false;
+            }
+
+            quizdeckDto.quizList.push(quizDto);
           }
-
-          quizdeckDto.quizList.push(quizDto);
+        } else {
+          quizdeckDto.isUnlock = false;
+          quizdeckDto.cost = deck.quizList.length;
         }
         response.data.push(quizdeckDto);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    return response;
+  }
+
+  async unlockQuizDeckWallet(body: UnlockDeckDto) {
+    const quizdeckModel = this.modelManager.getModel(ModelType.QUIZDECK);
+    const answers = this.modelManager.getModel(ModelType.ANSWER);
+    const unlockModel = this.modelManager.getModel(ModelType.UNLOCKDECK);
+    const userModel = this.modelManager.getModel(ModelType.USER);
+
+    const response = new CoreResponseDto();
+    try {
+      const user = await userModel.findOne({
+        wallet: { $regex: new RegExp(`^${body.walletAddress}$`, "i") },
+      });
+      const deck = await quizdeckModel.findById(body.deckId);
+      const unlock = await unlockModel.findOne({
+        wallet: { $regex: new RegExp(`^${body.walletAddress}$`, "i") },
+        deck: body.deckId,
+      });
+
+      if (unlock == null) {
+        if (user.credit < deck.quizList.length) {
+          response.code = 1;
+          response.message = "Not Enough Credit";
+          return response;
+        } else {
+          const unlock = new UnlockDeck();
+          unlock.wallet = user.wallet;
+          unlock.deck = deck._id;
+          await unlockModel.create(unlock);
+          await userModel.findByIdAndUpdate(user._id, {
+            $inc: { credit: -deck.quizList.length },
+          });
+          return response;
+        }
+      } else {
+        // console.log(unlock);
       }
     } catch (error) {
       console.log(error);

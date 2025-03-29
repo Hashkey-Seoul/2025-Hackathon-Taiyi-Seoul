@@ -51,3 +51,13 @@ export class QuizSubmissionDto {
   @IsOptional()
   walletAddress: string;
 }
+
+export class UnlockDeckDto {
+  @IsString()
+  @IsOptional()
+  deckId: string;
+
+  @IsString()
+  @IsOptional()
+  walletAddress: string;
+}

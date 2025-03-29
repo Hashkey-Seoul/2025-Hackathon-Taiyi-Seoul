@@ -5,8 +5,8 @@ import { User, UserSchema } from "src/schemas/user.schema";
 import { Answer, AnswerSchema } from "src/schemas/answer.schema";
 import { Quiz, QuizSchema } from "src/schemas/quiz.schema";
 import { QuizDeck, QuizDeckSchema } from "src/schemas/quiz-deck.schema";
-
 import { Transaction, TransactionSchema } from "src/schemas/transaction.schema";
+import { UnlockDeck, UnlockDeckSchema } from "src/schemas/unlock-deck.schema";
 
 @Module({
   imports: [
@@ -16,6 +16,7 @@ import { Transaction, TransactionSchema } from "src/schemas/transaction.schema";
       { name: QuizDeck.name, schema: QuizDeckSchema },
       { name: Answer.name, schema: AnswerSchema },
       { name: Transaction.name, schema: TransactionSchema },
+      { name: UnlockDeck.name, schema: UnlockDeckSchema },
     ]),
   ],
   exports: [ModelmanagerService],

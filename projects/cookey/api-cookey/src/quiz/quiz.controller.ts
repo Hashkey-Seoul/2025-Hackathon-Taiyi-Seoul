@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
 import { QuizService } from "./quiz.service";
 import { ApiTags } from "@nestjs/swagger";
-import { QuizSubmissionDto } from "./dto/request-quiz.dto";
+import { QuizSubmissionDto, UnlockDeckDto } from "./dto/request-quiz.dto";
 
 @ApiTags("Quiz")
 @Controller("quiz")
@@ -27,6 +27,10 @@ export class QuizController {
   @Get("/deck/:wallet")
   getQuizDeckWallet(@Param("wallet") wallet) {
     return this.quizService.getQuizDeckWallet(wallet);
+  }
+  @Post("/deck/unlock/")
+  unlockQuizDeckWallet(@Body() body: UnlockDeckDto) {
+    return this.quizService.unlockQuizDeckWallet(body);
   }
   @Get("/")
   getQuiz(@Query() quries) {

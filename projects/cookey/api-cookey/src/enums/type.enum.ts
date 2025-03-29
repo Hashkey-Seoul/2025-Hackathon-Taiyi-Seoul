@@ -9,4 +9,5 @@ export enum ModelType {
   QUIZDECK = "QUIZDECK",
   ANSWER = "ANSWER",
   TRANSACTION = "TRANSACTION",
+  UNLOCKDECK = "UNLOCKDECK",
 }

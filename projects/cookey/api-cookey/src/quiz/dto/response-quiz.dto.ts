@@ -15,6 +15,8 @@ export class QuizDeckDto {
   }
   id: string;
   title: string;
+  isUnlock: boolean;
+  cost: number;
   quizList: QuizDto[];
 }
 

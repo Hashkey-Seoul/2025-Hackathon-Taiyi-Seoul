@@ -17,6 +17,7 @@ import {
   Transaction,
   TransactionDocument,
 } from "src/schemas/transaction.schema";
+import { UnlockDeck } from "src/schemas/unlock-deck.schema";
 
 @Injectable()
 export class ModelmanagerService {
@@ -31,6 +32,8 @@ export class ModelmanagerService {
     private answerModel: AggregatePaginateModel<AnswerDocument>,
     @InjectModel(Transaction.name)
     private transactionModel: AggregatePaginateModel<TransactionDocument>,
+    @InjectModel(UnlockDeck.name)
+    private unlockdeckModel: AggregatePaginateModel<TransactionDocument>,
   ) {}
 
   getAggregateModel(type): AggregatePaginateModel<any> {
@@ -45,6 +48,8 @@ export class ModelmanagerService {
         return this.answerModel;
       case ModelType.TRANSACTION:
         return this.transactionModel;
+      case ModelType.UNLOCKDECK:
+        return this.unlockdeckModel;
       default:
         return null;
     }
@@ -62,6 +67,8 @@ export class ModelmanagerService {
         return this.answerModel;
       case ModelType.TRANSACTION:
         return this.transactionModel;
+      case ModelType.UNLOCKDECK:
+        return this.unlockdeckModel;
       default:
         return null;
     }
