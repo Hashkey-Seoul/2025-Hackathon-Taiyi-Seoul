@@ -4,6 +4,10 @@ import {
   OnModuleDestroy,
   Logger,
 } from "@nestjs/common";
+import { Cron, CronExpression } from "@nestjs/schedule";
+import { ModelType } from "src/enums/type.enum";
+import { ModelmanagerService } from "src/modelmanager/modelmanager.service";
+import { Transaction } from "src/schemas/transaction.schema";
 import Web3 from "web3";
 
 class EventPoller {
@@ -91,12 +95,14 @@ export class SubscribeService implements OnModuleInit, OnModuleDestroy {
   private readonly wsRpcUrl = process.env.HASHKEY_TESTNET_RPC_WSS; // WebSocket RPC URL (예: Infura WebSocket URL)
   private readonly httpRpcUrl = process.env.HASHKEY_TESTNET_RPC_HTTPS;
   private readonly targetAddress = process.env.TARGET_WALLET; // 감지할 주소
+  private readonly BASE_URL =
+    "https://hashkeychain-testnet-explorer.alt.technology/api/v2";
   private logger = new Logger(SubscribeService.name);
 
-  constructor() {
+  constructor(private readonly modelManager: ModelmanagerService) {
     this.web3 = new Web3(new Web3.providers.WebsocketProvider(this.wsRpcUrl));
     // console.log(this.wsRpcUrl);
-    console.log(this.targetAddress);
+    // console.log(this.targetAddress);
   }
 
   // WebSocket 연결 및 블록 이벤트 구독
@@ -115,7 +121,7 @@ export class SubscribeService implements OnModuleInit, OnModuleDestroy {
     // this.subscribeToNewBlocks();
 
     // 특정 주소로 발생한 트랜잭션 로그 구독
-    this.subscribeToAddressTransactions();
+    // this.subscribeToAddressTransactions();
   }
 
   // 새로운 블록 구독
@@ -189,5 +195,57 @@ export class SubscribeService implements OnModuleInit, OnModuleDestroy {
     } else {
       this.logger.error("❌ Provider is not a WebSocketProvider");
     }
+  }
+
+  @Cron(CronExpression.EVERY_10_SECONDS, {
+    name: "Fetch transaction",
+  })
+  async fetchTransaction() {
+    const transactionModel = this.modelManager.getModel(ModelType.TRANSACTION);
+    const userModel = this.modelManager.getModel(ModelType.USER);
+    try {
+      const url = `${this.BASE_URL}/addresses/${process.env.TARGET_WALLET}/transactions?filter=to`;
+      // console.log(url);
+
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      for (const item of data.items) {
+        // console.log(item.hash);
+        // console.log(item.from.hash);
+        // // console.log(item.value);
+        // // console.log(item.block_number);
+        // console.log(Number(item.value / 10 ** 18));
+        const weiToHSK = Number(item.value / 10 ** 18);
+        const tx = await transactionModel.findOne({
+          hash: item.hash,
+          from: { $regex: new RegExp(`^${item.from.hash}$`, "i") },
+          value: weiToHSK,
+          blockNumber: item.block_number,
+        });
+        // console.log(tx);
+        if (tx == null) {
+          const newTx = new Transaction();
+          newTx.hash = item.hash;
+          newTx.blockNumber = item.block_number;
+          newTx.from = item.from.hash;
+          newTx.value = weiToHSK;
+
+          await transactionModel.create(newTx);
+          const credit = weiToHSK * 10;
+          await userModel.findOneAndUpdate(
+            { wallet: newTx.from },
+            { $inc: { credit: credit } },
+            { upsert: true },
+          );
+        }
+      }
+      // console.log("end------------------");
+      // console.log(data);
+    } catch (error) {}
   }
 }

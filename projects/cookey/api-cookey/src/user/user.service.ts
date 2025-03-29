@@ -43,15 +43,18 @@ export class UserService {
         response.data = new UserInfoDto();
         response.data.id = user._id;
         response.data.point = user.point;
+        response.data.credits = user.credit;
         response.data.wallet = user.wallet;
       } else {
         const newUser = new User();
         newUser.wallet = wallet;
         newUser.point = 0;
+        newUser.credit = 0;
         await userModel.create(newUser);
 
         response.data = new UserInfoDto();
         response.data.point = newUser.point;
+        response.data.credits = newUser.credit;
         response.data.wallet = newUser.wallet;
       }
     } catch (error) {}

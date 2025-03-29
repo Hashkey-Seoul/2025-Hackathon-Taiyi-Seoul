@@ -5,10 +5,10 @@ import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 import { ApiProperty } from "@nestjs/swagger";
 
-export type UserDocument = User & Document;
+export type TransactionDocument = Transaction & Document;
 
 @Schema({ timestamps: { createdAt: "createdAt", updatedAt: "updatedAt" } })
-export class User {
+export class Transaction {
   constructor() {
     this._id = new Types.ObjectId();
   }
@@ -26,8 +26,8 @@ export class User {
     description: "nickname",
     type: String,
   })
-  @Prop({ type: String })
-  nickname;
+  @Prop({ type: String, unique: true })
+  hash;
 
   @ApiProperty({
     description: "web3 wallet address",
@@ -36,28 +36,27 @@ export class User {
   @Prop({
     type: String,
     required: true,
-    unique: true,
     collation: { locale: "en", strength: 2 },
   })
-  wallet;
+  from;
 
   @ApiProperty({
-    description: "quiz point",
+    description: "HSK value",
     type: Number,
   })
-  @Prop({ type: Number, default: 0 })
-  point;
+  @Prop({ type: Number })
+  value;
 
   @ApiProperty({
-    description: "credit point",
+    description: "blockNumber",
     type: Number,
   })
-  @Prop({ type: Number, default: 0 })
-  credit;
+  @Prop({ type: Number })
+  blockNumber;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const TransactionSchema = SchemaFactory.createForClass(Transaction);
 
-UserSchema.plugin(mongoosePaginate);
-UserSchema.plugin(mongooseAggregatePaginate);
-export const pagedUserSchema = UserSchema;
+TransactionSchema.plugin(mongoosePaginate);
+TransactionSchema.plugin(mongooseAggregatePaginate);
+export const pagedTransactionSchema = TransactionSchema;

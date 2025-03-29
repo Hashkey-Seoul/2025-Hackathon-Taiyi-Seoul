@@ -6,6 +6,8 @@ import { Answer, AnswerSchema } from "src/schemas/answer.schema";
 import { Quiz, QuizSchema } from "src/schemas/quiz.schema";
 import { QuizDeck, QuizDeckSchema } from "src/schemas/quiz-deck.schema";
 
+import { Transaction, TransactionSchema } from "src/schemas/transaction.schema";
+
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -13,6 +15,7 @@ import { QuizDeck, QuizDeckSchema } from "src/schemas/quiz-deck.schema";
       { name: Quiz.name, schema: QuizSchema },
       { name: QuizDeck.name, schema: QuizDeckSchema },
       { name: Answer.name, schema: AnswerSchema },
+      { name: Transaction.name, schema: TransactionSchema },
     ]),
   ],
   exports: [ModelmanagerService],

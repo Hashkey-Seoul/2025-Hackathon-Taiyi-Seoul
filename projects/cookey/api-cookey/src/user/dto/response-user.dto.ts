@@ -5,6 +5,7 @@ export class UserInfoDto {
   id: string;
   wallet: string;
   point: number;
+  credits: number;
 }
 
 export class ResponseUserInfoDto extends CoreResponseDto {

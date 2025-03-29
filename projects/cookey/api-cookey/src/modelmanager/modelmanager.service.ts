@@ -13,6 +13,10 @@ import { User, UserDocument } from "src/schemas/user.schema";
 import { Quiz, QuizDocument } from "src/schemas/quiz.schema";
 import { Answer, AnswerDocument } from "src/schemas/answer.schema";
 import { QuizDeck, QuizDeckDocument } from "src/schemas/quiz-deck.schema";
+import {
+  Transaction,
+  TransactionDocument,
+} from "src/schemas/transaction.schema";
 
 @Injectable()
 export class ModelmanagerService {
@@ -25,6 +29,8 @@ export class ModelmanagerService {
     private quizDeckModel: AggregatePaginateModel<QuizDeckDocument>,
     @InjectModel(Answer.name)
     private answerModel: AggregatePaginateModel<AnswerDocument>,
+    @InjectModel(Transaction.name)
+    private transactionModel: AggregatePaginateModel<TransactionDocument>,
   ) {}
 
   getAggregateModel(type): AggregatePaginateModel<any> {
@@ -37,6 +43,8 @@ export class ModelmanagerService {
         return this.quizDeckModel;
       case ModelType.ANSWER:
         return this.answerModel;
+      case ModelType.TRANSACTION:
+        return this.transactionModel;
       default:
         return null;
     }
@@ -52,6 +60,8 @@ export class ModelmanagerService {
         return this.quizDeckModel;
       case ModelType.ANSWER:
         return this.answerModel;
+      case ModelType.TRANSACTION:
+        return this.transactionModel;
       default:
         return null;
     }

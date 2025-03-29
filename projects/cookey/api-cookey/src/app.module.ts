@@ -13,6 +13,7 @@ import { UserModule } from "./user/user.module";
 import { QuizModule } from "./quiz/quiz.module";
 import { SubscribeModule } from "./subscribe/subscribe.module";
 import jwtConfig from "./configs/jwt.config";
+import { ScheduleModule } from "@nestjs/schedule";
 
 @Module({
   imports: [
@@ -34,7 +35,8 @@ import jwtConfig from "./configs/jwt.config";
     }),
     UserModule,
     QuizModule,
-    // SubscribeModule,
+    SubscribeModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService, Logger],
