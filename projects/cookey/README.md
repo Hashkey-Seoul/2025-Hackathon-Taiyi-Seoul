@@ -17,74 +17,27 @@ Welcome to the HackerHouse Projects Showcase! This repository features all the a
 Create a `README.md` in your project folder using this template:
 
 ```markdown
-# Project Name
+# Cookey
 
 ## Overview
-[Describe your project in 2-3 sentences - what it does and what problem it solves]
-
-## Tech Stack
-- Frontend: [List frontend technologies]
-- Backend: [List backend technologies]
-- Other: [Any other relevant technologies]
-
-## Demo
-- Demo Video: [YouTube link]
-- Project Deck: [Google Slides link]
-
-## Team
-- Member A - Role
-- Member B - Role
-- Member C - Role
-```
-
-## Example
-
-```markdown
-# AI Writing Assistant
-
-## Overview
-An intelligent writing assistant powered by GPT-4, helping users generate high-quality content quickly. Supports multiple writing styles and adapts content based on user feedback.
+[Cookey is a Web3 quiz oracle that turns crowd answers into trusted, on-chain truth.
+Play fun quizzes, make predictions with the community, and help mint the most likely answers on-chain.
+It’s fun, collective, and decentralized — this is Cookey.]
 
 ## Tech Stack
 - Frontend: React, TailwindCSS
-- Backend: Node.js, Express
-- AI: OpenAI API, Langchain
-- Deployment: Docker, AWS
+- Backend: Nestjs, MongoDB
+- Deployment: PM2, AWS
+- Documentation: Swagger
 
 ## Demo
-- Demo Video: https://youtube.com/watch?v=...
-- Project Deck: https://docs.google.com/presentation/d/...
+- Demo Video: TODO
+- Project Deck: https://docs.google.com/presentation/d/1Zn1g_i1Kroh1_rXd3I4m_GS3-TMxe3abYFWQZqqIIkE/edit?usp=sharing
 
 ## Team
-- John Doe - Full Stack Developer
-- Jane Smith - AI Engineer
-- Mike Johnson - Product Designer
-```
-
-## Submission Requirements
-
-- The submission deadline is 10:00 on the 22th, with the following submission requirements:
-    - Project Code
-        - Submit code for review and testing. You need to include at least one open source license from the following:
-        - MIT - https://opensource.org/licenses/MIT
-        - Apache 2.0 - https://opensource.org/licenses/Apache-2.0
-        - 3-Clause BSD - https://opensource.org/licenses/BSD-3-Clause
-        Detailed submission rules will be announced later.
-        We suggest developers focus on creativity and MVP implementation during the Hackerhouse. Time is precious, and you can consider project and code completeness and detailed architecture design later.
-    - Deck
-        - Brief project description, team introduction, etc.
-    - Live Demo & Video (Optional)
-
-## Documentation Resources
-
-For more information and guidance, please refer to:
-- [Official Documentation](https://docs.hsk.xyz/)
-- [Technical Documentation](https://documentation-1oqt.vercel.app/)
-
-## Notes
-- Ensure your documentation follows the template format
-- All links should be accessible
-- Team member information should be complete and accurate
-- Projects must be placed in the `/projects` directory (e.g., `/projects/example-project-1`)
+- Bill - Product Planner
+- Alex - Frontend developer
+- Noah - Frontend developer
+- Jade - Backend developer
 
 Good luck with your Demo Day! 🚀
