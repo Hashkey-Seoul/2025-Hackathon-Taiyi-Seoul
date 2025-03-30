@@ -48,6 +48,9 @@ export class Quiz {
   })
   @Prop({ type: String })
   correctAnswer: string;
+
+  @Prop({ type: String })
+  category: string;
 }
 
 export const QuizSchema = SchemaFactory.createForClass(Quiz);

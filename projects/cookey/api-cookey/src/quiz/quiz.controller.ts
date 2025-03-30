@@ -13,11 +13,11 @@ export class QuizController {
   //   return this.quizService.postQuiz();
   // }
   // @Post("/deck")
-  // postQuizDeck(@Query() quries) {
+  // postQuizDecke(@Query() quries) {
   //   return this.quizService.postQuizDeck();
   // }
   @Post("/submission")
-  postQuizDeck(@Body() body: QuizSubmissionDto) {
+  postSubmission(@Body() body: QuizSubmissionDto) {
     return this.quizService.postSubmission(body);
   }
   @Get("/deck")

@@ -236,7 +236,7 @@ export class SubscribeService implements OnModuleInit, OnModuleDestroy {
           newTx.value = weiToHSK;
 
           await transactionModel.create(newTx);
-          const credit = weiToHSK * 10;
+          const credit = weiToHSK * 1000;
           await userModel.findOneAndUpdate(
             { wallet: newTx.from },
             { $inc: { credit: credit } },

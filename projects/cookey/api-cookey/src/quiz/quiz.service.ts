@@ -24,14 +24,16 @@ export class QuizService {
     const quiz = new Quiz();
     try {
       quiz.question =
-        "What is a major reason why developers should build on HashKey Chain?";
+        "What does the meme phrase “It’s over 9000!” have to do with Web3?";
       quiz.answerList = [
-        "Zero gas fees forever",
-        "Ecosystem support for social apps",
-        "Mandatory KYC for users",
-        "No smart contract support",
+        "A BTC price milestone",
+        "The amount of ETH burned",
+        "A meme used to hype NFT sales volume",
+        "Nothing really – it just gets reused because it’s a meme",
       ];
-      quiz.correctAnswer = "Ecosystem support for social apps ";
+      quiz.correctAnswer =
+        "Nothing really – it just gets reused because it’s a meme";
+      quiz.category = "mweb3";
 
       await quizModel.create(quiz);
     } catch (error) {}
@@ -42,8 +44,8 @@ export class QuizService {
     const quizModel = this.modelManager.getModel(ModelType.QUIZ);
     const deck = new QuizDeck();
     try {
-      deck.title = "Hashkey Quiz";
-      deck.quizList = await quizModel.find();
+      deck.title = "Web3 Quiz";
+      deck.quizList = await quizModel.find({ category: "mweb3" });
       console.log(deck);
       await quizDeckModel.create(deck);
     } catch (error) {
