@@ -31,7 +31,7 @@ It’s fun, collective, and decentralized — this is Cookey.]
 - Documentation: Swagger
 
 ## Demo
-- Demo Video: TODO
+- Demo Video: https://youtube.com/shorts/Jpge2CKSGo4?feature=share
 - Project Deck: https://docs.google.com/presentation/d/1Zn1g_i1Kroh1_rXd3I4m_GS3-TMxe3abYFWQZqqIIkE/edit?usp=sharing
 
 ## Team
